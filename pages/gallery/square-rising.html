@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rising Squares</title>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+    <div class="canvas-wrapper">
+        <canvas></canvas>
+    </div>
+<script>
+ //Initial Setup
+
+var canvas = document.querySelector('canvas');
+var ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+//Variables 
+
+
+//Event Listeners
+
+addEventListener('resize', () => {
+	canvas.width = innerWidth;
+	canvas.height = innerHeight;
+
+	init();
+});
+
+// Utility Functions
+
+function randomIntFromRange(min,max){
+	return Math.floor(Math.random()* (max - min + 1) + min);
+}
+
+function randomColor(colors){
+	return colors[Math.floor(Math.random()* colors.length)];
+}
+
+
+
+
+//single square with color properties
+function SquareToColor(x,y,w,h,lineWidth,color,color_radius,velocity){
+	this.x = x;
+	this.y = y;
+	this.w = w;
+	this.h = h;
+	this.lineWidth = lineWidth;
+	this.color = color;
+	this.color_radius = color_radius;
+	this.timer = 0;
+	this.velocity = velocity
+	
+	this.draw = () =>{
+		ctx.strokeRect(this.x,this.y,this.w,this.h);
+		ctx.lineWidth = this.lineWidth;
+		ctx.stroke();
+
+		ctx.fillStyle = 'hsla(' + this.color +', 100%,'+ Math.abs(Math.sin(this.timer) * this.color_radius) +'%'+', 1)';;
+		ctx.fillRect(this.x,this.y,this.w,this.h)
+
+		this.y += 1;
+		this.timer += Math.random()* this.velocity;
+
+		if(this.y > canvas.height){
+			this.y = - this.h;
+		}		
+	}
+ }
+
+
+
+
+function Squares_column(x,w,lineWidth,radius,velocity){
+	this.x = x;
+	this.y = 0;
+	this.h = canvas.height/8;
+	this.w = w;
+	this.lineWidth = lineWidth;
+	this.radius = radius; 
+	this.squares = [];
+	this.velocity = velocity
+	this.hsla_colors = [52,35,197,167,142];
+	this.color = this.hsla_colors[Math.floor(Math.random()* this.hsla_colors.length)];
+	this.init = () =>{	
+		for(let i = 0; i < 60; i++){
+			this.squares.push(new SquareToColor
+				(this.x,this.y,this.w,this.h,this.lineWidth,this.color,this.radius,this.velocity));
+			this.y += this.h;
+		}	
+	}
+	this.init();
+	this.draw = () =>{
+		for(let i = 0; i < this.squares.length; i++){
+			this.squares[i].draw();
+			
+		}
+	}
+}
+
+
+/* hsla colors ....
+
+hsla(237, 100%, 50%, 1): blue,
+hsla(133, 100%, 50%, 1): green,
+hsla(55, 100%, 50%, 1): yellow,
+hsla(6, 100%, 50%, 1): red,
+hsla(179, 100%, 50%, 1): cyan,
+
+radius between 10% to 50%
+*/
+
+function draw_squares(arr,length){
+	this.the_x();
+	for(let i = 0; i < length; i++){
+		arr.push(new Squares_column
+			(this.x,this.width,this.lineWidth,this.radius,this.velocity));
+		this.x -= this.width;
+	}
+}
+
+//Implementation 
+
+var right_squares,
+	mid_squares,
+	bold_squares,
+	left_squares;
+
+function init(){
+	right_squares = [];
+	mid_squares   = [];
+	bold_squares  = [];
+	left_squares  = [];
+
+	var square_right = {
+		   lineWidth: 8,
+		       width: (canvas.width*0.5)/8,
+		      radius: 50,
+		    velocity: 0.2,
+		    	   x: undefined,
+		      startX: function(){
+		      	return canvas.width - this.width - this.lineWidth/2;
+		      },
+		       the_x: function(){
+		       		this.x = this.startX();
+		       }
+	}
+
+
+	var square_mid = {
+		   lineWidth: 25,
+		       width: (canvas.width*0.5)/8,
+		      radius: 20,
+		    velocity: 0.1,
+		    	   x: undefined,
+		      startX: function(){
+		      	return right_squares[right_squares.length-1].x - this.width - this.lineWidth/2;
+		      },
+		       the_x: function(){
+		       		this.x = this.startX();
+		       }
+	}
+
+
+	var square_bold = {
+		   lineWidth: 35,
+		       width: (canvas.width*0.5)/10,
+		      radius: 15,
+		    velocity: 0.05,
+		    	   x: undefined,
+		      startX: function(){
+		      	return mid_squares[mid_squares.length-1].x - this.width - this.lineWidth/2;
+		      },
+		       the_x: function(){
+		       		this.x = this.startX();
+		       }
+	}
+
+	var square_left = {
+		   lineWidth: 15,
+		       width: (canvas.width*0.5)/10,
+		      radius: 25,
+		    velocity: 0.07,
+		    	   x: undefined,
+		      startX: function(){
+		      	return bold_squares[bold_squares.length-1].x - this.width - this.lineWidth*2;
+		      },
+		       the_x: function(){
+		       		this.x = this.startX();
+		       }
+	}
+
+	draw_squares.apply(square_right, [right_squares,5]);
+	draw_squares.apply(square_mid, [mid_squares,3]);
+	draw_squares.apply(square_bold, [bold_squares,3]);
+	draw_squares.apply(square_left, [left_squares,6]);
+
+}
+
+//Animation loop
+
+
+
+function animate(){
+	requestAnimationFrame(animate);
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	
+
+	right_squares.forEach(function(e,i){
+		right_squares[i].draw();
+	});
+
+	
+	mid_squares.forEach(function(e,i){
+		mid_squares[i].draw();
+	});
+
+	bold_squares.forEach(function(e,i){
+		bold_squares[i].draw();
+	});
+
+	left_squares.forEach(function(e,i){
+		left_squares[i].draw();
+	});
+}
+
+init();
+animate();
+</script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Yin Yang</title>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+    <div class="canvas-wrapper-taichi">
+        <canvas></canvas>
+    </div>
+<script>
+
+console.log(123);
+
+//Initial Setup
+
+var canvas = document.querySelector('canvas');
+var ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+//global Variables 
+
+var mouse = {
+	x: innerWidth/2,
+	y: innerHeight/2
+};
+
+//Event Listeners
+addEventListener('mousemove', event => {
+	mouse.x = event.clientX;
+	mouse.y = event.clientY;
+});
+
+addEventListener('resize', () => {
+	canvas.width = innerWidth;
+	canvas.height = innerHeight;
+});
+
+// Utility Functions
+
+function randomIntFromRange(min,max){
+	return Math.floor(Math.random()* (max - min + 1) + min);
+}
+
+function randomColor(colors){
+	return colors[Math.floor(Math.random()* colors.length)];
+}
+
+
+//Objects 
+
+function Circle(x,y,color){ 
+	this.x = x;
+	this.y = y;
+	this.r = 15;
+	this.color = color;
+	this.draw = () => {
+
+		ctx.beginPath();
+		ctx.shadowColor = this.color;
+		ctx.shadowBlur = 10;
+		ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, false);
+		ctx.fillStyle = this.color;
+		ctx.fill();
+		ctx.closePath();
+	
+	}
+ }
+
+function Circle_move(x,y,dx,dy,color){
+	this.boundary = 120;
+	this.color = color;
+	this.speed = {
+		x:dx,
+		y:dy
+	};
+	this.distance = {
+		x:x,
+		y:y
+	};
+	this.arr = [];
+	this.velocity = 2;
+	this.update = function(){
+
+		let position = {
+			x:mouse.x + this.distance.x,
+			y:mouse.y + this.distance.y
+		}
+
+		this.distance.x += this.speed.x;
+		this.distance.y += this.speed.y;
+		if(this.distance.x > this.boundary || this.distance.x < -this.boundary){
+			this.speed.x = -this.speed.x;
+		}
+		if(this.distance.y > this.boundary || this.distance.y < -this.boundary){
+			this.speed.y = -this.speed.y;
+		}
+
+		let dot = new Circle(position.x, position.y,this.color);
+		dot.draw();		
+	}
+}
+
+function Black_white(){
+	this.yin = [];
+	this.yang = [];
+	this.init = function(){
+		for(let i = 0; i < 2; i++){
+			this.yang.push(new Circle_move(
+				randomIntFromRange(-5,8),
+				randomIntFromRange(3,3),
+				Math.random()*1.5 + 1,
+				Math.random()*0.8 + 1,'white'));
+			this.yin.push(new Circle_move(
+				randomIntFromRange(-10,12),
+				randomIntFromRange(3,3),
+				Math.random()*2 + 1,
+				Math.random()*2 + 1,'black'));		
+		}
+
+	}
+	this.init();
+	this.update = function(){
+		if(isMouseDown == false || isMouseDown == 3){
+			this.yin.forEach(function(e){
+				e.update();
+			});
+			this.yang.forEach(function(e){
+				e.update();
+			});
+		}else if(isMouseDown == true){
+			tai_chi.update();
+		}
+	}
+}
+
+
+//Implementation 
+
+function TaiChi(x,y){
+	this.x = x;
+	this.y = y;
+	this.main_radius = border_width/2;
+	this.sub_radius = border_width/4;
+	this.semi_radius = border_width/3;
+	this.rate = 115/85;
+	this.color = 0.2;
+	// this.rad = {
+	// 	top: 1.5*Math.PI, //postionA and circleA rad
+	// 	bottom: Math.PI/2, //positionB and circleB rad
+	// 	right:1.5*Math.PI + 45*Math.PI/180, //position C
+	// 	left:135*Math.PI/180,
+	// }
+	this.rad = [1.5*Math.PI, Math.PI/2, 1.5*Math.PI + 53*Math.PI/180, 153*Math.PI/180];
+	this.control_width = this.rate*this.main_radius;
+	this.control_radius =  Math.sqrt(Math.pow(this.main_radius,2) + Math.pow(this.control_width,2));
+	this.control_rad_add = Math.asin(this.control_width/this.control_radius); //+= this.curve_speed
+	this.control_rad_down = Math.asin(this.control_width/this.control_radius); //-= this.curve_speed
+	this.initial_speed = 0.01;
+	this.curve_speed = 0.01; 
+	this.draw_circle = function(r,color){
+		ctx.beginPath();
+		ctx.arc(this.x,this.y,r,0,Math.PI*2);
+		ctx.fillStyle = color;
+		ctx.fill();
+	}
+
+	this.draw = function(){
+		let updated_rad = this.rad.map((e)=>{
+			return e + this.initial_speed;
+		});
+
+		let center = {
+			x:this.x,
+			y:this.y
+		}
+		/*PositionA, positionB, circleA and circle B are in same speed */
+		
+		//top[0] -> bottom[1] -> right[2] -> left[3]
+
+		let positionA = {
+			x:this.x + this.main_radius*Math.cos(updated_rad[0]),
+			y:this.y + this.main_radius*Math.sin(updated_rad[0])			
+		}
+		
+		let positionB = {
+			x:this.x + this.main_radius*Math.cos(updated_rad[1]),
+			y:this.y + this.main_radius*Math.sin(updated_rad[1])
+		}		
+		//Yin and Yang
+		let circleA = {
+			x:this.x + this.sub_radius*Math.cos(updated_rad[0]),
+			y:this.y + this.sub_radius*Math.sin(updated_rad[0])
+		}
+		let circleB = {
+			x:this.x + this.sub_radius*Math.cos(updated_rad[1]),
+			y:this.y + this.sub_radius*Math.sin(updated_rad[1])
+		}
+		
+		let positionC = {
+			x:this.x + this.semi_radius*Math.cos(updated_rad[2]),
+			y:this.y + this.semi_radius*Math.sin(updated_rad[2])
+		}
+
+		let positionD = {
+			x:this.x + this.semi_radius*Math.cos(updated_rad[3]),
+			y:this.y + this.semi_radius*Math.sin(updated_rad[3])
+		}	
+		//left bottom
+		let curveA = {
+			x: this.x - this.control_radius*Math.sin(this.control_rad_add),
+			y: this.y + this.control_radius*Math.cos(this.control_rad_add),
+		}
+		let curveB = {
+			x: this.x - this.control_radius*Math.sin(this.control_rad_down),
+			y: this.y - this.control_radius*Math.cos(this.control_rad_down)
+		}
+		let curveC = {
+			x: this.x + this.control_radius*Math.sin(this.control_rad_add),
+			y: this.y - this.control_radius*Math.cos(this.control_rad_add)
+		}
+		let curveD = {
+			x: this.x + this.control_radius*Math.sin(this.control_rad_down),
+			y: this.y + this.control_radius*Math.cos(this.control_rad_down)
+		}
+		ctx.beginPath();
+		ctx.moveTo(positionA.x,positionA.y);
+		ctx.quadraticCurveTo(positionC.x,positionC.y,center.x,center.y);
+		ctx.quadraticCurveTo(positionD.x,positionD.y,positionB.x,positionB.y)
+		ctx.bezierCurveTo(curveA.x,curveA.y, curveB.x,curveB.y,positionA.x,positionA.y);
+		ctx.fillStyle = 'rgba(255,255,255,'+this.color+')'; //should be in rgba format
+		ctx.fill();
+
+		ctx.beginPath();
+		ctx.moveTo(positionA.x,positionA.y);
+		ctx.bezierCurveTo(curveC.x,curveC.y, curveD.x,curveD.y, positionB.x,positionB.y)
+		ctx.quadraticCurveTo(positionD.x,positionD.y, center.x,center.y);
+		ctx.quadraticCurveTo(positionC.x,positionC.y, positionA.x,positionA.y);
+		ctx.fillStyle = 'rgba(0,0,0,'+this.color+')'; //should be in rgba format related to the this.curve_speed
+		ctx.fill();
+
+		this.draw_circle.call(circleA, 15,'black');
+		this.draw_circle.call(circleB, 15,'white');
+
+	}
+	this.update = function(){
+		this.draw();
+		//this.curve_speed for controling velocity 
+		this.control_rad_add += this.curve_speed;
+		this.control_rad_down -= this.curve_speed;
+
+		this.initial_speed += this.curve_speed;
+
+		if(isMouseDown == true){
+			this.color += 0.005;
+			this.curve_speed += 0.002;
+		}
+	}
+}
+
+//flag variables and eventlistener
+var border_width = 200;
+var isMouseDown = false;
+var color_timer = 0.1;
+//release the mouse
+window.addEventListener("mouseup",function(){
+	isMouseDown = 3;
+
+});
+
+//hold the mouse
+window.addEventListener("mousedown",function(){
+	isMouseDown = true;
+	
+});
+
+
+var tai_chi = new TaiChi(mouse.x,mouse.y);
+let test = new Black_white();
+//Animation loop
+
+function animate(){
+	requestAnimationFrame(animate);
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	//tai_chi.update();
+	test.update();
+
+
+
+}
+
+animate();
+</script>
+</body>
+</html>

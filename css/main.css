@@ -1,0 +1,29 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; }
+
+html {
+  font-size: 62.5%; }
+
+body {
+  box-sizing: border-box; }
+
+[class^="can"] {
+  position: relative;
+  z-index: -10; }
+
+.canvas-wrapper {
+  background-color: #000; }
+
+.canvas-wrapper-taichi {
+  background-color: #1d262d; }
+
+.gallery-container .img-link {
+  float: left;
+  width: calc(100%/8);
+  height: 100vh;
+  text-align: center;
+  border: 2px solid red; }

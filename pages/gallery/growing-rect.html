@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Growing Rect</title>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+    <div class="canvas-wrapper">
+        <canvas></canvas>
+    </div>
+<script>
+    console.log('running');
+
+canvas = document.querySelector('canvas');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize',function(e){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+ctx = canvas.getContext('2d');
+
+//global variables
+    
+var width = canvas.width/10;
+var startX = canvas.width/2 - width/2;
+var startY = canvas.height/2 - width/2;
+var maxCount = 5;
+var increment = canvas.height/15;
+var startLineSpeed = 1;
+var startLineVelocity = 5;
+
+var colorArr = ['#B22A24','#FFF610','#00A0CC','#afae50'];
+
+
+function randomColor(colors){
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+
+function Line(x,y,w,lineSpeed,lineVelocity){
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.color = randomColor(colorArr);
+    this.lineWidth = 8;
+    this.lineSpeed = lineSpeed;
+    this.lineVelocity = lineVelocity;
+    this.speed = [window.speed1,window.speed2,
+                 window.speed3,window.speed4,window.speed5];
+    this.dx = [window.dx1,window.dx2,
+               window.dx3,window.dx4,window.dx5];
+    this.addSpeed = function(){
+        this.speed.fill(this.lineSpeed);
+        this.dx.fill(this.lineVelocity);
+    }
+    this.addSpeed();
+
+
+    this.drawLine = function(){
+        
+       
+         ctx.beginPath();
+         ctx.moveTo(this.x,this.y);
+         ctx.lineTo(this.x+this.speed[0],this.y);
+         ctx.lineWidth = this.lineWidth;
+         ctx.strokeStyle = this.color;
+
+        if(this.speed[0] > this.w){
+            ctx.beginPath();
+            ctx.moveTo(this.x + this.w - this.lineWidth/2,this.y);
+            ctx.lineTo(this.x + this.w - this.lineWidth/2,this.y+this.speed[1]);
+            ctx.strokeStyle =this.color;
+            ctx.stroke();
+            this.speed[1] += this.dx[1];
+            if(this.speed[1] > this.w){
+               
+                this.dx[1] = 0;
+                ctx.beginPath();
+                ctx.moveTo(this.x+this.w,this.y + this.w);
+                ctx.lineTo(this.x+this.w - this.speed[2],this.y + this.w );
+                ctx.strokeStyle =this.color;
+                ctx.stroke();
+                this.speed[2] += this.dx[2];
+                if(this.speed[2] > this.w){
+                    this.dx[2] = 0;
+                    ctx.beginPath();
+                    ctx.moveTo(this.x + this.lineWidth/2,this.y+this.w);
+                    ctx.lineTo(this.x + this.lineWidth/2,this.y+this.w - this.speed[3]);
+                    ctx.strokeStyle =this.color;
+                    ctx.stroke();
+                    this.speed[3] += this.dx[3];
+                    if(this.speed[3] > this.w){
+                        this.dx[3] = 0;
+                        ctx.beginPath();
+                        ctx.moveTo(this.x,this.y);
+                        ctx.lineTo(this.x + this.speed[4],this.y);
+                        ctx.strokeStyle =this.color;
+                        ctx.stroke();
+                        this.speed[4] += this.dx[4];
+                        if(this.speed[4] > this.w){
+                            this.dx[4] = 0;
+                            this.speed[1] = 0;// end the line animation
+
+                            console.log(this.flag());
+                        }
+                    }
+                }
+            }
+        }
+         ctx.stroke();
+         this.speed[0]+=this.dx[0];
+        }
+
+        this.flag = function(){
+            return this.dx[4] != 0;
+        }
+}
+
+
+
+var metrics = {x:[],y:[],w:[]};
+var lineArr = [];
+var rectArr = [];
+function init(){
+    for(var i = 0; i < maxCount; i++){
+        metrics.x.push(startX);
+        metrics.y.push(startY);
+        metrics.w.push(width);
+
+        startX -= increment;
+        startY -= increment;
+        width += increment*2;
+    }
+
+}
+
+init();
+
+window.addEventListener('resize',function(e){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    lineArr = [];
+    rectArr = [];
+
+    
+});
+
+function Rect(x,y,w){
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.c = this.x + this.w;
+    this.d = this.y + this.w;
+    this.speed  = 2;
+    // this.lineArr = [];
+    // this.rectArr = [];
+    this.drawRect = function(){
+        ctx.beginPath();
+        ctx.moveTo(this.x,this.y);
+        ctx.lineTo(this.c,this.y);
+        ctx.lineTo(this.c,this.d);
+        ctx.lineTo(this.x,this.d);
+        ctx.lineTo(this.x,this.y);
+        ctx.lineWidth = 10;
+        ctx.stroke();
+        this.x -= this.speed, this.y -= this.speed;
+        this.c += this.speed, this.d += this.speed;
+    }   
+}
+
+
+function Explosion(){
+    
+    // this.init = function(){
+    //    for(var i = 0; i < maxCount; i++ ){
+    //         lineArr.push(new Line(metrics.x[i],metrics.y[i],metrics.w[i],startLineSpeed,startLineVelocity));
+    //         rectArr.push(new Rect(metrics.x[i],metrics.y[i],metrics.w[i]));
+           
+    //     }
+    // }
+    // this.init();
+    this.draw = function(){
+        for(var i = 0; i < maxCount; i++ ){
+            lineArr.push(new Line(metrics.x[i],metrics.y[i],metrics.w[i],startLineSpeed,startLineVelocity));
+            rectArr.push(new Rect(metrics.x[i],metrics.y[i],metrics.w[i]));
+            lineArr[i].drawLine();
+            if(lineArr[i].flag() == false){
+                rectArr[i].drawRect();
+            }
+
+            if(rectArr[0].x < -canvas.width/2){
+                lineArr.length = 0;
+                rectArr.length = 0;
+                console.log('less');
+            }
+
+            //console.log(rectArr[0].d - rectArr[0].y);
+
+            
+        }
+
+             
+       
+    }
+}
+
+
+var test = new Explosion();
+
+
+
+function animate(){
+    requestAnimationFrame(animate);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // explosions.push(new Explosion());
+    // for(var i = 0; i< explosions.length; i++){
+    //     explosions[i].draw();
+    // }
+    test.draw();
+
+    
+        
+
+}
+animate();
+
+</script>
+</body>
+</html>

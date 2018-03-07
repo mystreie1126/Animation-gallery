@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lighiting Tunnell</title>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+    <div class="canvas-wrapper">
+        <canvas></canvas>
+    </div>
+
+<script>
+
+
+//Initial Setup
+
+var canvas = document.querySelector('canvas');
+var ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+//Variables 
+
+var mouse = {
+	x: innerWidth/2,
+	y: innerHeight/2
+};
+
+var colors = [
+	'#2185C5',
+	'#7ECEFD',
+	'#FFF6E5',
+	'#FF7F66',
+];
+
+//Event Listeners
+addEventListener('mousemove', event => {
+	mouse.x = event.clientX;
+	mouse.y = event.clientY;
+
+});
+
+addEventListener('resize', () => {
+	canvas.width = innerWidth;
+	canvas.height = innerHeight;
+
+	init();
+
+
+});
+
+// Utility Functions
+
+function randomIntFromRange(min,max){
+	return Math.floor(Math.random()* (max - min + 1) + min);
+}
+
+function randomColor(colors){
+	return colors(Math.floor(Math.random()* colors.length));
+}
+
+
+//Objects 
+
+const particle_radius = 5;
+
+//single particle moving in a circle
+function Particle(r,rad){
+
+	//circle attributes
+	this.x = canvas.width/2;
+	this.y = canvas.height/2;
+	this.r = r;
+	this.color = 'blue';
+	this.rad = rad;
+	this.velocity = 0.009;
+	this.timer = 0;
+	
+
+	this.drawCircle = () => {
+		//big circle
+		ctx.beginPath();
+		ctx.arc(this.x, this.y,this.r,0, Math.PI*2, false);
+		ctx.stroke();
+		ctx.closePath();	
+	};
+	this.update = () => {
+		
+		var particle = 
+		{
+			x:this.x + this.r*Math.cos(this.rad),
+			y:this.y + this.r*Math.sin(this.rad),
+			r:particle_radius
+		};
+	
+			ctx.beginPath();
+			ctx.arc(particle.x,particle.y,particle.r,0,Math.PI*2,false);
+			// ctx.shadowColor = 'blue';
+			// ctx.shadowBlur = 10;
+			ctx.fillStyle = 'hsl('+Math.abs(Math.sin(this.timer) * 255)+', 40%, 50%)';
+			ctx.fill();
+			ctx.closePath();
+			
+			this.rad += this.velocity;
+			this.timer += Math.random()*0.008;
+			
+			//console.log(this.rad);
+		
+	};
+	
+ }
+
+
+//multiple particles moving in a circle, particles numbers depends on the circle radius 'r'
+function Particles_circle(r){
+	this.r = r;
+	this.particle_r = particle_radius; //const variable
+	this.increment = Math.PI * (this.particle_r/r);
+	this.startAngle = 0;
+	this.particle_postions = [];
+	this.init = () =>{
+		while(this.startAngle < Math.PI*2){
+			this.particle_postions.push(new Particle(this.r,this.startAngle));
+			this.startAngle += this.increment;
+			
+		}
+	}
+	this.init();
+	this.draw = () =>{
+		for(let i = 0; i < this.particle_postions.length; i++){
+			this.particle_postions[i].update();
+		}
+	}
+}
+
+//Implementation 
+
+var circles;
+var initial_radius;
+function init(){
+	circles = [];
+	initial_radius = canvas.width/20;
+	while(initial_radius < canvas.width/2){
+		circles.push(new Particles_circle(initial_radius));
+		initial_radius += canvas.width/22;
+	}
+}
+
+//Animation loop
+
+function animate(){
+	requestAnimationFrame(animate);
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	circles.forEach(function(e,i){
+		circles[i].draw();
+	});
+
+}
+
+init();
+animate();
+</script>
+</body>
+</html>

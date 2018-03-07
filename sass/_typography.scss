@@ -1,0 +1,29 @@
+
+//styling the pages/gallery...
+
+[class^="can"]{
+    position: relative;
+    z-index: -10;
+}
+
+.canvas-wrapper{
+    background-color: $color-black;
+}
+
+.canvas-wrapper-taichi{
+    background-color: $color-taichi-bg;
+}
+
+//styling the pages/main.html.....
+
+.gallery-container{
+  .img-link{
+      float: left;
+      width:calc(100%/8);
+      height: 100vh;
+      text-align: center;
+      border: 2px solid red;
+  }
+    
+    
+}

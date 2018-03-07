@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Flashy Bars</title>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+    <div class="canvas-wrapper">
+        <canvas></canvas>
+    </div>
+<script>
+    var canvas = document.querySelector('canvas');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+var ctx = canvas.getContext('2d');
+console.log('running');
+
+var boxCount = 40;
+var boxHeight = canvas.height/40;
+var boxWidth = canvas.width/boxCount;
+var mouse = {x:undefined ,undefined};
+var boxes = [];
+
+window.addEventListener("mousemove",function(e){
+	mouse.x = e.clientX;
+	mouse.y = e.clientY;
+});
+
+window.addEventListener("resize",function(e){
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	boxHeight = canvas.height/40;
+	boxWidth = canvas.width/boxCount;
+	boxes = [];
+	botBox();
+});
+function Box(x,width){
+	this.x = x;
+	this.width = width;
+	this.height = canvas.height/40;
+	this.draw = function(){
+		var colorTimer = 0;
+		var rate = Math.random()*5;
+		//colorTimer += rate;
+		var postionY = canvas.height;
+		var ladder = Math.floor(Math.random()*((canvas.height*0.5)/boxHeight)) + 1;
+		var distanceBetweenBoxandMouseX = (this.x + this.width/2) - mouse.x;
+			if(distanceBetweenBoxandMouseX > -this.width/2 && distanceBetweenBoxandMouseX < this.width/2){
+				ladder = Math.floor((canvas.height - mouse.y)/boxHeight);
+				rate = Math.random()*0.03;
+			}
+			for(var i = 0; i < ladder; i++){
+				ctx.fillStyle = 'hsl('+Math.abs(Math.sin(colorTimer) * 255)+', 40%, 50%)';
+				ctx.fillRect(this.x, postionY, this.width, this.height);
+				ctx.strokeRect(this.x, postionY, this.width, this.height);
+				ctx.lineWidth = 2;
+				ctx.stroke();
+				postionY -= this.height;
+				colorTimer += rate;
+			}
+	}
+}
+
+
+function botBox(){
+	var boxPostion = 0;
+	for(var i = 0; i < boxCount; i++){
+		boxes.push(new Box(boxPostion,boxWidth));
+		boxPostion += boxWidth;
+	}
+}
+
+botBox();
+
+function animate(){
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	window.requestAnimationFrame(animate);
+	for(var i = 0; i < boxes.length; i++){
+		boxes[i].draw();
+	}
+	
+}
+animate();
+
+
+</script>
+</body>
+</html>

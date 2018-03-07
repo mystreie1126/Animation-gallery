@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Gravity</title>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+    <div class="canvas-wrapper">
+        <canvas></canvas>
+    </div>
+
+<script>
+	// initial setup
+    var canvas = document.querySelector('canvas');
+var ctx = canvas.getContext('2d');
+console.log('Running');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+//varaibles 
+var mouse ={
+	x: canvas.width/2,
+	y: canvas.height/2
+}
+
+// var colors = [
+// 	'#2185C5',
+// 	'#7ECEFD',
+// 	'#FFF6E5',
+// 	'#FF5F21',
+// 	'#1AD5FF'
+// ];
+
+
+var rgbColor = [255,183,84];
+var gravity = 0.5;
+var friction = 0.7;
+var isMouseDown = false;
+var mouse = {x:undefined,y:undefined};
+var timer = 0;
+//Event Listeners
+
+//release the mouse
+window.addEventListener("mouseup",function(){
+	isMouseDown = 5;
+});
+
+//hold the mouse
+window.addEventListener("mousedown",function(){
+	isMouseDown = true;
+	timer = 0;
+});
+
+
+
+window.addEventListener("mousemove",function(e){
+	mouse.x = e.clientX;
+	mouse.y = e.clientY;
+});
+
+window.addEventListener("resize",function(){
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	ballArray = [];
+	init();
+	
+});
+
+// Utiltiy Functions
+function randomIntFromRange(min,max){
+	return Math.floor(Math.random()*(max - min + 1)+ min);
+}
+
+function randomColor(colors){
+	return colors[Math.floor(Math.random() * colors.length)];
+}
+
+// Ball
+
+function Ball(x,y,dx,dy,radius){
+	this.x = x;
+	this.y = y;
+	this.dx = dx;
+	this.dy = dy;
+	this.radius = radius;
+	this.ballTrails = [];
+	this.myColor = randomColor(rgbColor);
+	this.velocity = 4;
+	this.comeToMouse = function(){
+		if(this.x > mouse.x){
+			this.x -= this.velocity;
+		}else if(this.x < mouse.x){
+			this.x += this.velocity;
+		}
+
+		if(this.y > mouse.y){
+			this.y -= this.velocity;
+		}else if(this.y < mouse.y){
+			this.y += this.velocity;
+		}
+	}
+	this.drawTrails = function(){
+		for(var i = 0; i < 1; i++)
+		{
+			this.ballTrails.push({x:this.x, y:this.y});
+		}
+		if(this.ballTrails.length > 10){
+			this.ballTrails.shift();
+		}
+	}
+
+	this.update = function(){
+		if(this.y + this.radius + this.dy > canvas.height)
+		{
+			this.dy = -this.dy * friction;
+		} 
+		else 
+		{
+			this.dy += gravity;
+		}
+
+		if(this.x + this.radius + this.dx > canvas.width || this.x - this.radius < 0)
+		{
+			this.dx = -this.dx;
+		}
+		this.x += this.dx;
+		this.y += this.dy;
+		this.draw();
+		
+		//flag variable
+		if(isMouseDown == true){
+			timer += 0.001;
+			this.dx = randomIntFromRange(-2,2);
+			this.dy = randomIntFromRange(-2,2);
+			this.comeToMouse();
+		}
+	};
+
+	this.draw = function(){
+		//rgba(19,195,255),(19,195,183),(19,195,84)
+		ctx.beginPath();
+		ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
+		ctx.fillStyle = 'rgb(19,195,'+ this.myColor + ')';
+		ctx.fill();
+		// ctx.stroke();
+		ctx.closePath();
+
+		this.drawTrails(this.x, this.y);
+
+		for(var i = 0; i < this.ballTrails.length; i++)
+		{
+			var ratio = (i + 1)/this.ballTrails.length;
+			ctx.beginPath();
+			ctx.arc(this.ballTrails[i].x,this.ballTrails[i].y,this.radius,0,Math.PI*2,false);
+			ctx.fillStyle = 'rgba(19,195,'+ this.myColor + ','+ ratio/2+')';
+			ctx.fill();
+			// ctx.stroke();
+			ctx.closePath();
+			//console.log(ratio);
+		}
+	};
+}
+
+Ball.prototype.render = function(){
+	this.dx += randomIntFromRange(-2,2);
+	this.dy += randomIntFromRange(-3,3);
+	this.update();
+	timer -= 0.01;
+}
+
+
+var ballArray = [];
+
+function init(){
+	for(var i = 0; i < 20; i++){
+		var radius = randomIntFromRange(20,40);
+		var x = randomIntFromRange(radius,canvas.width - radius);
+		var y = randomIntFromRange(0,canvas.height - radius);
+		var dx = randomIntFromRange(-4, 4);
+		var dy = randomIntFromRange(-1, 1);
+		ballArray.push(new Ball(x,y,dx,dy,radius));
+	}
+}
+init();
+
+
+
+function animate(){
+	window.requestAnimationFrame(animate);
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	for(var i = 0; i < ballArray.length; i++){
+		ballArray[i].update();
+
+		if(isMouseDown == 5){
+			ballArray[i].render();
+		}
+	}
+	
+	
+}
+
+animate();
+
+</script>
+</body>
+</html>

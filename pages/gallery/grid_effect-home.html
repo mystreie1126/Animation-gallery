@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>this is suppose to be home page...</title>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+    <div class="canvas-wrapper">
+        <canvas></canvas>
+    </div>
+</body>
+<script>
+    var canvas = document.querySelector("canvas");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+ctx = canvas.getContext("2d");
+console.log("running");
+// "#0CC2FF", rgba(12, 194, 255, 1), position velocity = 1, width and height velocity = 2;
+
+// setting the constructor
+//grow speed should be no more than 0.8, math.random()*0.8
+function Box(x,y,xVelocity,yVelocity,growSpeed,ttl){
+	this.x = x;
+	this.y = y;
+	this.height = 0;
+	this.width = 0;
+	this.xVelocity = xVelocity;
+	this.yVelocity = yVelocity;
+	this.opacity = 1;
+	this.timeToLive = ttl;
+	this.growSpeed = growSpeed;
+	this.remove = function(){
+		return this.opacity <= 0;
+	}
+	this.update = function(){
+
+		this.x += this.xVelocity;
+		this.y += this.yVelocity;
+		this.height += this.growSpeed;
+		this.width += this.growSpeed;
+		this.opacity -= 1/(this.timeToLive/0.01);
+		this.timeToLive  -= 0.001;
+
+		ctx.strokeStyle = "rgba(12,194,255,"+ this.opacity +")";
+		ctx.strokeRect(this.x,this.y,this.height,this.width);
+	}
+
+}
+
+function randomIntFromRange(min,max){
+	return Math.floor((Math.random()*(max - min + 1)) + min);
+}
+
+window.addEventListener("resize",function(e){
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	explosionBoxes.length = 0;
+
+});
+
+function Explosion(growSpeed,ttl){
+	this.growSpeed = growSpeed;
+	this.ttl = ttl;
+	this.boxes = [];
+	this.xArray = [];
+	this.yArray = [];
+	this.xVelocity = randomIntFromRange(-1.5,1.5);
+	this.yVelocity = randomIntFromRange(-1,1);
+	
+	this.filter = function(){
+		for(var i = 0; i <= 1; i++){
+			var position ={
+				x:randomIntFromRange(canvas.width*0.475,canvas.width*0.575),
+				y:randomIntFromRange(canvas.height*0.475,canvas.height*0.575)
+			}
+
+			this.xArray.push(position.x);
+			this.yArray.push(position.y);
+		}
+	}
+	this.init = function(){
+		this.filter();
+		for(var i = 0; i <= 1 ; i++){
+			this.boxes.push(new Box(this.xArray[i],this.yArray[i],this.xVelocity,
+				this.yVelocity,this.growSpeed,this.ttl));
+		}
+	}
+	this.init();
+	this.draw = function(){
+		for(var i = 0; i < this.boxes.length; i++){
+			this.boxes[i].update();
+
+			if(this.boxes[i].remove() == true){
+				this.boxes.shift();
+			}
+		}
+	}
+}
+
+
+
+var explosionBoxes = [];
+
+function animate(){
+	ctx.clearRect(0,0,canvas.width,canvas.height);	
+	requestAnimationFrame(animate);
+	explosionBoxes.push(new Explosion(Math.random()*1,Math.random()*6.5));
+	for(var i = 0; i < explosionBoxes.length; i++){
+		explosionBoxes[i].draw();
+	}
+}
+animate();
+
+</script>
+</html>

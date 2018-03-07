@@ -1,0 +1,12 @@
+$color-black: #000;
+$color-taichi-bg: #1d262d;
+
+//mixin
+
+@mixin clearfix{
+    &::after{
+        content: "";
+        display:table;
+        clear: both;
+    }
+}
