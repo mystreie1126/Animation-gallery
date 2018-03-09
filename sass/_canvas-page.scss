@@ -6,18 +6,15 @@
     height: 100vh;
     &-canvas{
         background-color: $color-black;
+        &-taichi{
+            background-color: $color-taichi-bg;
+        }
     }
 
     [class^='canvas__wrapper-']{
         position: absolute;
         color: $color-white;
         z-index: $stack-order-medium;
-    }
-
-    &-info{
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
     }
 
     &-link{
@@ -49,6 +46,35 @@
                     transform: translate(10%,-20%);
                     opacity: 1;
                 }
+            }
+        }
+    }
+
+    &-info{
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        .canvas-details{
+            text-align: center;
+            color:$color-white;
+            &-title{
+                font-size: $canvas-title-font;
+                letter-spacing: .8rem;
+                text-transform: uppercase;
+            }
+
+            &-line{
+                background: $color-white;
+                width: 150px;
+                height: .1rem;
+                margin: 2rem auto;
+            }
+
+            &-date{
+                font-size: $canvas-title-font/2.5;
+                font-weight: lighter;
+                font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+                font-style: italic;
             }
         }
     }

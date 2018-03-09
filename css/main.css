@@ -26,14 +26,12 @@ body {
   height: 100vh; }
   .canvas__wrapper-canvas {
     background-color: #000; }
+    .canvas__wrapper-canvas-taichi {
+      background-color: #1d262d; }
   .canvas__wrapper [class^='canvas__wrapper-'] {
     position: absolute;
     color: #fff;
     z-index: 2; }
-  .canvas__wrapper-info {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); }
   .canvas__wrapper-link .prev {
     display: inline-block;
     position: relative;
@@ -59,3 +57,24 @@ body {
       .canvas__wrapper-link .prev:hover:after {
         transform: translate(10%, -20%);
         opacity: 1; }
+  .canvas__wrapper-info {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); }
+    .canvas__wrapper-info .canvas-details {
+      text-align: center;
+      color: #fff; }
+      .canvas__wrapper-info .canvas-details-title {
+        font-size: 4.8rem;
+        letter-spacing: .8rem;
+        text-transform: uppercase; }
+      .canvas__wrapper-info .canvas-details-line {
+        background: #fff;
+        width: 150px;
+        height: .1rem;
+        margin: 2rem auto; }
+      .canvas__wrapper-info .canvas-details-date {
+        font-size: 1.92rem;
+        font-weight: lighter;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-style: italic; }
