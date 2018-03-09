@@ -6,10 +6,12 @@
   box-sizing: inherit; }
 
 html {
-  font-size: 62.5%; }
+  font-size: 62.5%;
+  font-family: "lato", sans-serif; }
 
 body {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  font-family: inherit; }
 
 .gallery-container .img-link {
   float: left;
@@ -32,5 +34,28 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%); }
-  .canvas__wrapper-link {
-    font-size: 2rem; }
+  .canvas__wrapper-link .prev {
+    display: inline-block;
+    position: relative;
+    font-weight: 700;
+    font-size: 2rem;
+    padding: 2rem 5rem 5rem 1rem;
+    transform: translateX(10%);
+    color: #fff;
+    transition: all .3s ease; }
+    .canvas__wrapper-link .prev {
+      text-decoration: none;
+      text-transform: uppercase; }
+    .canvas__wrapper-link .prev::after {
+      display: inline-block;
+      content: 'all projects';
+      transform: translate(20%, -20%);
+      opacity: 0;
+      transition: all .3s ease;
+      font-size: 1.2rem;
+      letter-spacing: .2rem; }
+    .canvas__wrapper-link .prev:hover {
+      transform: translateX(-5%); }
+      .canvas__wrapper-link .prev:hover:after {
+        transform: translate(10%, -20%);
+        opacity: 1; }
