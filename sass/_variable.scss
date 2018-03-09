@@ -1,5 +1,11 @@
 $color-black: #000;
+$color-white: #fff;
 $color-taichi-bg: #1d262d;
+
+//stack order 
+
+$stack-order-low: -2;
+$stack-order-medium :2;
 
 //mixin
 
@@ -8,5 +14,12 @@ $color-taichi-bg: #1d262d;
         content: "";
         display:table;
         clear: both;
+    }
+}
+
+@mixin clear-underline{
+    &{
+        text-decoration: none;
+        text-transform: uppercase;
     }
 }
