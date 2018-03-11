@@ -1,0 +1,13 @@
+@keyframes animate-1{
+    0%{
+        transform: translateX(100%);
+    }
+
+    100%{
+        transform: translateX(0);
+    }
+}
+
+.animate-link-1{
+    animation: animate-1;
+}

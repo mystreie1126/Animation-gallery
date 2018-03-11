@@ -3,13 +3,69 @@
 //styling the pages/main.html.....
 
 .gallery-container{
+  @include clearfix;
+  background: $color-black;
+  
   .img-link{
+      @include clear-underline;
       float: left;
       width:calc(100%/8);
       height: 100vh;
       text-align: center;
-      border: 2px solid red;
+      position: relative;
+      transition: all .3s ease-in;
+      &:hover{
+        transform: scale(1.2) skewX(-2deg);
+        box-shadow: 0 1.5rem 2rem  rgba($color-white,.5);
+      }
   }
-    
-    
+
+  .img-heading{
+      transform: translateY(45vh);
+      font-size: 2rem;
+      font-style: italic;
+      color:$color-white;
+      letter-spacing: .2rem;
+      
+  }
+  
+  .img-link-1{
+    background-image: url(../img/taichi.png);
+    @include bg-img-property;
+  }
+
+  .img-link-2{
+    background-image: url(../img/flash-grid.png);
+    @include bg-img-property;
+  }
+  
+  .img-link-3{
+    background-image: url(../img/gravity.png);
+    @include bg-img-property;
+  }
+
+  .img-link-4{
+    background-image: url(../img/rising-rect.png);
+    @include bg-img-property;
+  }
+
+  .img-link-5{
+    background-image: url(../img/lighting-tunnell.png);
+    @include bg-img-property;
+  }
+
+  .img-link-6{
+    background-image: url(../img/growing-rect.png);
+    @include bg-img-property;
+  }
+
+  .img-link-7{
+    background-image: url(../img/grid_home.png);
+    @include bg-img-property;
+  }
+
+  .img-link-8{
+    background-image: url(../img/gear.png);
+    @include bg-img-property;
+  }
 }

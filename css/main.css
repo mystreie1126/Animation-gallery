@@ -13,12 +13,80 @@ body {
   box-sizing: border-box;
   font-family: inherit; }
 
-.gallery-container .img-link {
-  float: left;
-  width: calc(100%/8);
-  height: 100vh;
-  text-align: center;
-  border: 2px solid red; }
+@keyframes animate-1 {
+  0% {
+    transform: translateX(100%); }
+  100% {
+    transform: translateX(0); } }
+
+.animate-link-1 {
+  animation: animate-1; }
+
+.gallery-container {
+  background: #000; }
+  .gallery-container::after {
+    content: "";
+    display: table;
+    clear: both; }
+  .gallery-container .img-link {
+    float: left;
+    width: calc(100%/8);
+    height: 100vh;
+    text-align: center;
+    position: relative;
+    transition: all .3s ease-in; }
+    .gallery-container .img-link {
+      text-decoration: none;
+      text-transform: uppercase; }
+    .gallery-container .img-link:hover {
+      transform: scale(1.2) skewX(-2deg);
+      box-shadow: 0 1.5rem 2rem rgba(255, 255, 255, 0.5); }
+  .gallery-container .img-heading {
+    transform: translateY(45vh);
+    font-size: 2rem;
+    font-style: italic;
+    color: #fff;
+    letter-spacing: .2rem; }
+  .gallery-container .img-link-1 {
+    background-image: url(../img/taichi.png); }
+    .gallery-container .img-link-1 {
+      background-position: center;
+      background-size: cover; }
+  .gallery-container .img-link-2 {
+    background-image: url(../img/flash-grid.png); }
+    .gallery-container .img-link-2 {
+      background-position: center;
+      background-size: cover; }
+  .gallery-container .img-link-3 {
+    background-image: url(../img/gravity.png); }
+    .gallery-container .img-link-3 {
+      background-position: center;
+      background-size: cover; }
+  .gallery-container .img-link-4 {
+    background-image: url(../img/rising-rect.png); }
+    .gallery-container .img-link-4 {
+      background-position: center;
+      background-size: cover; }
+  .gallery-container .img-link-5 {
+    background-image: url(../img/lighting-tunnell.png); }
+    .gallery-container .img-link-5 {
+      background-position: center;
+      background-size: cover; }
+  .gallery-container .img-link-6 {
+    background-image: url(../img/growing-rect.png); }
+    .gallery-container .img-link-6 {
+      background-position: center;
+      background-size: cover; }
+  .gallery-container .img-link-7 {
+    background-image: url(../img/grid_home.png); }
+    .gallery-container .img-link-7 {
+      background-position: center;
+      background-size: cover; }
+  .gallery-container .img-link-8 {
+    background-image: url(../img/gear.png); }
+    .gallery-container .img-link-8 {
+      background-position: center;
+      background-size: cover; }
 
 .canvas__wrapper {
   position: relative;
