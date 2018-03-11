@@ -90,7 +90,7 @@ body {
   .home_wrapper-canvas {
     background-color: #000; }
   .home_wrapper-intro {
-    width: 50%;
+    width: 60%;
     color: #fff;
     position: absolute;
     top: 40%;
@@ -105,7 +105,8 @@ body {
     .home_wrapper-intro #quotes {
       text-transform: uppercase;
       font-weight: bold;
-      font-size: 3rem; }
+      font-size: 3rem;
+      letter-spacing: .1rem; }
     .home_wrapper-intro .view_all-container {
       margin-top: 4rem; }
       .home_wrapper-intro .view_all-container .view_all-btn:link,

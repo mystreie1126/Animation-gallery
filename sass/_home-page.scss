@@ -8,7 +8,7 @@
     }
     
     &-intro{
-        width: 50%;
+        width: 60%;
         color:$color-white;
         
         position: absolute;
@@ -27,7 +27,7 @@
             text-transform: uppercase;
             font-weight: bold;
             font-size: 3rem;
-            
+            letter-spacing: .1rem;
         }
         .view_all-container{
             margin-top: 4rem;
