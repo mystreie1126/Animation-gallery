@@ -254,7 +254,7 @@ body {
   height: 100vh;
   position: relative; }
   .home_wrapper-canvas {
-    background-color: #000; }
+    background-color: teal; }
   .home_wrapper-intro {
     width: 60%;
     color: #fff;
@@ -275,8 +275,9 @@ body {
       letter-spacing: .1rem; }
     .home_wrapper-intro .view_all-container {
       margin-top: 4rem; }
-      .home_wrapper-intro .view_all-container .view_all-btn:link,
-      .home_wrapper-intro .view_all-container .view_all-btn:visited {
+      .home_wrapper-intro .view_all-container .view_all-btn {
+        cursor: pointer;
+        display: inline-block;
         font-size: 1.5rem;
         color: #fff;
         position: relative;
@@ -287,18 +288,15 @@ body {
         background-size: 0;
         background-position: center;
         transition: all .2s ease; }
-        .home_wrapper-intro .view_all-container .view_all-btn:link,
-        .home_wrapper-intro .view_all-container .view_all-btn:visited {
+        .home_wrapper-intro .view_all-container .view_all-btn {
           text-decoration: none;
           text-transform: uppercase; }
-        .home_wrapper-intro .view_all-container .view_all-btn:link::before,
-        .home_wrapper-intro .view_all-container .view_all-btn:visited::before {
+        .home_wrapper-intro .view_all-container .view_all-btn::before {
           left: -10%;
           border: 2px solid #fff;
           border-right: none;
           -webkit-transform: skewX(25deg); }
-          .home_wrapper-intro .view_all-container .view_all-btn:link::before,
-          .home_wrapper-intro .view_all-container .view_all-btn:visited::before {
+          .home_wrapper-intro .view_all-container .view_all-btn::before {
             position: absolute;
             content: '';
             height: 120%;
@@ -306,14 +304,12 @@ body {
             top: -10%;
             z-index: -2;
             transition: all .2s ease-in; }
-        .home_wrapper-intro .view_all-container .view_all-btn:link::after,
-        .home_wrapper-intro .view_all-container .view_all-btn:visited::after {
+        .home_wrapper-intro .view_all-container .view_all-btn::after {
           right: -10%;
           border: 2px solid #fff;
           border-left: none;
           -webkit-transform: skewX(-25deg); }
-          .home_wrapper-intro .view_all-container .view_all-btn:link::after,
-          .home_wrapper-intro .view_all-container .view_all-btn:visited::after {
+          .home_wrapper-intro .view_all-container .view_all-btn::after {
             position: absolute;
             content: '';
             height: 120%;
@@ -321,12 +317,129 @@ body {
             top: -10%;
             z-index: -2;
             transition: all .2s ease-in; }
-        .home_wrapper-intro .view_all-container .view_all-btn:link:hover,
-        .home_wrapper-intro .view_all-container .view_all-btn:visited:hover {
+        .home_wrapper-intro .view_all-container .view_all-btn:hover {
           background-size: 100%;
           color: #000; }
-        .home_wrapper-intro .view_all-container .view_all-btn:link:hover:before, .home_wrapper-intro .view_all-container .view_all-btn:link:hover:after,
-        .home_wrapper-intro .view_all-container .view_all-btn:visited:hover:before,
-        .home_wrapper-intro .view_all-container .view_all-btn:visited:hover:after {
+        .home_wrapper-intro .view_all-container .view_all-btn:hover:before, .home_wrapper-intro .view_all-container .view_all-btn:hover:after {
           background-color: #fff;
           -webkit-transform: skewX(0deg); }
+  .home_wrapper .gallery-container {
+    position: absolute;
+    top: 0;
+    left: 120%;
+    transition: all 1s ease;
+    width: 100%;
+    background: transparent;
+    z-index: 100; }
+    .home_wrapper .gallery-container::after {
+      content: "";
+      display: table;
+      clear: both; }
+    .home_wrapper .gallery-container .img-link {
+      box-sizing: border-box;
+      border: 1px solid #1d262d;
+      float: left;
+      width: calc(100%/8);
+      height: 100vh;
+      text-align: center;
+      position: relative;
+      transition: all .3s ease-in; }
+      .home_wrapper .gallery-container .img-link {
+        text-decoration: none;
+        text-transform: uppercase; }
+      .home_wrapper .gallery-container .img-link:hover {
+        transform: scale(1.2) skewX(-2deg);
+        box-shadow: 0 1.5rem 2rem rgba(255, 255, 255, 0.5); }
+    .home_wrapper .gallery-container .img-heading {
+      transform: translateY(45vh);
+      font-size: 2rem;
+      font-style: italic;
+      color: #fff;
+      letter-spacing: .2rem; }
+    .home_wrapper .gallery-container .img-link-1 {
+      background-image: url(../img/taichi.png); }
+      .home_wrapper .gallery-container .img-link-1 {
+        background-position: center;
+        background-size: cover; }
+    .home_wrapper .gallery-container .img-link-2 {
+      background-image: url(../img/flash-grid.png); }
+      .home_wrapper .gallery-container .img-link-2 {
+        background-position: center;
+        background-size: cover; }
+    .home_wrapper .gallery-container .img-link-3 {
+      background-image: url(../img/gravity.png); }
+      .home_wrapper .gallery-container .img-link-3 {
+        background-position: center;
+        background-size: cover; }
+    .home_wrapper .gallery-container .img-link-4 {
+      background-image: url(../img/rising-rect.png); }
+      .home_wrapper .gallery-container .img-link-4 {
+        background-position: center;
+        background-size: cover; }
+    .home_wrapper .gallery-container .img-link-5 {
+      background-image: url(../img/lighting-tunnell.png); }
+      .home_wrapper .gallery-container .img-link-5 {
+        background-position: center;
+        background-size: cover; }
+    .home_wrapper .gallery-container .img-link-6 {
+      background-image: url(../img/growing-rect.png); }
+      .home_wrapper .gallery-container .img-link-6 {
+        background-position: center;
+        background-size: cover; }
+    .home_wrapper .gallery-container .img-link-7 {
+      background-image: url(../img/grid_home.png); }
+      .home_wrapper .gallery-container .img-link-7 {
+        background-position: center;
+        background-size: cover; }
+    .home_wrapper .gallery-container .img-link-8 {
+      background-image: url(../img/gear.png); }
+      .home_wrapper .gallery-container .img-link-8 {
+        background-position: center;
+        background-size: cover; }
+
+.navigation {
+  position: relative; }
+  .navigation__checkbox {
+    display: none; }
+  .navigation__button {
+    background-color: #fff;
+    height: 7rem;
+    width: 7rem;
+    position: fixed;
+    top: 6rem;
+    right: 6rem;
+    border-radius: 50%;
+    z-index: 2000; }
+  .navigation__background {
+    z-index: 1000;
+    height: 6rem;
+    width: 6rem;
+    border-radius: 50%;
+    position: fixed;
+    top: 6.5rem;
+    right: 6.5rem;
+    background: radial-gradient(black, rgba(0, 0, 0, 0.2));
+    transform: scale(50); }
+  .navigation__nav {
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1500; }
+  .navigation__list {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    list-style: none;
+    text-align: center; }
+  .navigation__item {
+    margin: 1rem; }
+  .navigation__link {
+    color: #fff;
+    font-size: 3rem;
+    font-weight: 300; }
+    .navigation__link {
+      text-decoration: none;
+      text-transform: uppercase; }
