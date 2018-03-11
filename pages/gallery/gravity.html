@@ -15,7 +15,7 @@
 			<a href="" class="prev">&#9001;</a>
 		</div>
 		<div class="canvas__wrapper-info">
-			<h1 class="canvas-details canvas-details-title">gravity balls</h1>
+			<h1 class="canvas-details canvas-details-title">gravity</h1>
 			<h1 class="canvas-details canvas-details-line"></h1>
 			<h1 class="canvas-details canvas-details-date">Aug 11, 2017</h1>
 		</div>
@@ -24,83 +24,82 @@
 
 
 <script>
-	// initial setup
-    var canvas = document.querySelector('canvas');
+
+
+var canvas = document.querySelector('canvas');
 var ctx = canvas.getContext('2d');
-console.log('Running');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-//varaibles 
-var mouse ={
-	x: canvas.width/2,
-	y: canvas.height/2
-}
+//Variables 
 
-// var colors = [
-// 	'#2185C5',
-// 	'#7ECEFD',
-// 	'#FFF6E5',
-// 	'#FF5F21',
-// 	'#1AD5FF'
-// ];
-
-
-var rgbColor = [255,183,84];
-var gravity = 0.5;
-var friction = 0.7;
+var mouse = {
+	x: innerWidth/2,
+	y: innerHeight/2
+};
+var rgbColor = [255,200,84];
 var isMouseDown = false;
-var mouse = {x:undefined,y:undefined};
 var timer = 0;
-//Event Listeners
 
-//release the mouse
-window.addEventListener("mouseup",function(){
-	isMouseDown = 5;
-});
+// Utility Functions
 
-//hold the mouse
-window.addEventListener("mousedown",function(){
-	isMouseDown = true;
-	timer = 0;
-});
-
-
-
-window.addEventListener("mousemove",function(e){
-	mouse.x = e.clientX;
-	mouse.y = e.clientY;
-});
-
-window.addEventListener("resize",function(){
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	ballArray = [];
-	init();
-	
-});
-
-// Utiltiy Functions
 function randomIntFromRange(min,max){
-	return Math.floor(Math.random()*(max - min + 1)+ min);
+	return Math.floor(Math.random()* (max - min + 1) + min);
 }
 
 function randomColor(colors){
-	return colors[Math.floor(Math.random() * colors.length)];
+	return colors[Math.floor(Math.random()* colors.length)];
 }
 
-// Ball
+//Event Listeners
+addEventListener('mousemove', event => {
+	mouse.x = event.clientX;
+	mouse.y = event.clientY;
 
-function Ball(x,y,dx,dy,radius){
+});
+
+addEventListener('resize', () => {
+	canvas.width = innerWidth;
+	canvas.height = innerHeight;
+
+	init();
+});
+
+
+//mouse events 
+
+window.addEventListener('mouseup', ()=>{
+	//trigger the render function 
+	timer = 0;
+	isMouseDown = 0;
+	console.log(isMouseDown);
+});
+
+window.addEventListener('mousedown', ()=>{
+	isMouseDown = true;
+	console.log(isMouseDown);
+});
+
+
+
+
+//Objects 
+
+function Ball(x, y, r, dx, dy){
 	this.x = x;
 	this.y = y;
+	this.r = r;
 	this.dx = dx;
 	this.dy = dy;
-	this.radius = radius;
 	this.ballTrails = [];
 	this.myColor = randomColor(rgbColor);
-	this.velocity = 4;
+
+	this.friction = 0.7;
+	this.gravity = 0.5;
+	this.velocity = 10;
+	this.ttl = 1.2;
+
 	this.comeToMouse = function(){
 		if(this.x > mouse.x){
 			this.x -= this.velocity;
@@ -114,47 +113,55 @@ function Ball(x,y,dx,dy,radius){
 			this.y += this.velocity;
 		}
 	}
+
+	this.update = () => {
+		this.draw();
+		
+
+		if(isMouseDown == true){
+			timer += Math.random()*0.002;
+			this.dy += timer/15;
+			this.dx += timer;
+			this.comeToMouse();
+
+		}
+
+		else if(isMouseDown == false || isMouseDown == 0){
+			this.y += this.dy/this.ttl;
+			this.x += this.dx/this.ttl;
+			this.ttl += Math.random()*0.08;
+			//this.y += this.dy;
+			if(this.y  + this.r > canvas.height){
+				this.dy = - this.dy;
+
+			}else{
+				this.dy += this.gravity;
+			}
+
+			if(this.x + this.r  > canvas.width || this.x - this.r < 0)
+			{
+				this.dx = -this.dx;
+			}
+		}
+			
+
+	}; //end of update 
+
+
+	//drawing 
 	this.drawTrails = function(){
 		for(var i = 0; i < 1; i++)
 		{
 			this.ballTrails.push({x:this.x, y:this.y});
 		}
-		if(this.ballTrails.length > 10){
+		if(this.ballTrails.length > 12){
 			this.ballTrails.shift();
-		}
-	}
-
-	this.update = function(){
-		if(this.y + this.radius + this.dy > canvas.height)
-		{
-			this.dy = -this.dy * friction;
-		} 
-		else 
-		{
-			this.dy += gravity;
-		}
-
-		if(this.x + this.radius + this.dx > canvas.width || this.x - this.radius < 0)
-		{
-			this.dx = -this.dx;
-		}
-		this.x += this.dx;
-		this.y += this.dy;
-		this.draw();
-		
-		//flag variable
-		if(isMouseDown == true){
-			timer += 0.001;
-			this.dx = randomIntFromRange(-2,2);
-			this.dy = randomIntFromRange(-2,2);
-			this.comeToMouse();
 		}
 	};
 
 	this.draw = function(){
-		//rgba(19,195,255),(19,195,183),(19,195,84)
 		ctx.beginPath();
-		ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
+		ctx.arc(this.x,this.y,this.r,0,Math.PI*2,false);
 		ctx.fillStyle = 'rgb(19,195,'+ this.myColor + ')';
 		ctx.fill();
 		// ctx.stroke();
@@ -166,55 +173,55 @@ function Ball(x,y,dx,dy,radius){
 		{
 			var ratio = (i + 1)/this.ballTrails.length;
 			ctx.beginPath();
-			ctx.arc(this.ballTrails[i].x,this.ballTrails[i].y,this.radius,0,Math.PI*2,false);
+			ctx.arc(this.ballTrails[i].x,this.ballTrails[i].y,this.r,0,Math.PI*2,false);
 			ctx.fillStyle = 'rgba(19,195,'+ this.myColor + ','+ ratio/2+')';
 			ctx.fill();
-			// ctx.stroke();
 			ctx.closePath();
-			//console.log(ratio);
 		}
-	};
-}
+	}; //end of drawing 
+ }
 
-Ball.prototype.render = function(){
-	this.dx += randomIntFromRange(-2,2);
-	this.dy += randomIntFromRange(-3,3);
-	this.update();
-	timer -= 0.01;
-}
+//Implementation 
 
-
-var ballArray = [];
+var ballArray;
 
 function init(){
-	for(var i = 0; i < 20; i++){
-		var radius = randomIntFromRange(20,40);
-		var x = randomIntFromRange(radius,canvas.width - radius);
-		var y = randomIntFromRange(0,canvas.height - radius);
-		var dx = randomIntFromRange(-4, 4);
-		var dy = randomIntFromRange(-1, 1);
-		ballArray.push(new Ball(x,y,dx,dy,radius));
+	ballArray = [];
+	for(let i = 0; i < 20; i++){
+		
+		let radius = randomIntFromRange(canvas.width/40,canvas.width/30);
+		let x = randomIntFromRange(radius,canvas.width - radius);
+		let y = randomIntFromRange(0,canvas.height - radius);
+		let dx = randomIntFromRange(-4, 4);
+		let dy = randomIntFromRange(-1, 1);
+		ballArray.push(new Ball(x,y,radius,dx,dy));
 	}
 }
 init();
 
 
+var x = canvas.width/2, 
+	y = canvas.height/2,
+	r = 20,
+	dx = 0,
+	dy = 10;
+var test = new Ball(x,y,r,dx,dy);
+//Animation loop
 
 function animate(){
-	window.requestAnimationFrame(animate);
+	requestAnimationFrame(animate);
 	ctx.clearRect(0,0,canvas.width,canvas.height);
-	for(var i = 0; i < ballArray.length; i++){
-		ballArray[i].update();
-
-		if(isMouseDown == 5){
-			ballArray[i].render();
-		}
-	}
-	
+	//test.update();
+	ballArray.forEach((e)=>{
+		e.update();
+	});
 	
 }
 
+init();
 animate();
+
+
 
 </script>
 </body>

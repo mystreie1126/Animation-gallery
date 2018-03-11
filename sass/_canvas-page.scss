@@ -1,9 +1,10 @@
 
 
 .canvas__wrapper{
-    position: relative;
-    width: 100%;
-    height: 100vh;
+    @include canvas-holder;
+    // position: relative;
+    // width: 100%;
+    // height: 100vh;
     &-canvas{
         background-color: $color-black;
         &-taichi{
