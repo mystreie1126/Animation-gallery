@@ -1,0 +1,20 @@
+.navigation__list-icon{
+    margin-top: 4rem;
+    .social-icon{
+        display: inline-block;
+        color: $color-white;
+        font-size: 3rem;
+        border: 1px solid white;
+        width: 4rem;
+        height: 100%;
+        border-radius: 50%;
+
+        &:not(:last-child){
+            margin-right: 1.5rem;
+        }
+
+        &:hover{
+            border: none;
+        }
+    }
+}

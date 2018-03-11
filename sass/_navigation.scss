@@ -13,6 +13,7 @@
         right: 6rem;
         border-radius: 50%;
         z-index: 2000;
+        //box-shadow: 1rem -1rem 1rem rgba($color-white,1);
     }
 
     &__background{
@@ -25,7 +26,7 @@
         right: 6.5rem;
         background:radial-gradient(rgba($color-black,1),rgba($color-black, .2));
         
-        transform: scale(50);
+        //transform: scale(50);
     }
 
     &__nav{
@@ -35,6 +36,9 @@
         top: 0;
         right: 0;
         z-index: 1500;
+
+        opacity: 0;
+        width: 0;
     }
 
     &__list{
@@ -44,17 +48,35 @@
         transform: translate(-50%,-50%);
         list-style: none;
         text-align: center;
+
     }
 
     &__item{
-        margin: 1rem;
+        margin: 2rem;
     }
 
     &__link{
-        color:$color-white;
-        font-size: 3rem;
-        font-weight: 300;
-        @include clear-underline
+        &:link,
+        &:visited,{
+            color:$color-white;
+            font-size: 3rem;
+            font-weight: 300;
+            @include clear-underline;
+            padding: 1rem 1rem;
+            background-image: linear-gradient(120deg,
+            transparent 0%, transparent 50%, $color-white 50%);
+            background-size: 220%;
+            transition: all .4s;
+        }
+       
+        &:hover,
+        &:active{
+            background-position: 100%;
+            color: $color-black;
+            transform: translateX(1rem);
+        }
         
     }
 }
+
+

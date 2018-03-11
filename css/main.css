@@ -418,15 +418,16 @@ body {
     position: fixed;
     top: 6.5rem;
     right: 6.5rem;
-    background: radial-gradient(black, rgba(0, 0, 0, 0.2));
-    transform: scale(50); }
+    background: radial-gradient(black, rgba(0, 0, 0, 0.2)); }
   .navigation__nav {
     height: 100vh;
     width: 100%;
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 1500; }
+    z-index: 1500;
+    opacity: 0;
+    width: 0; }
   .navigation__list {
     position: absolute;
     top: 50%;
@@ -435,11 +436,34 @@ body {
     list-style: none;
     text-align: center; }
   .navigation__item {
-    margin: 1rem; }
-  .navigation__link {
+    margin: 2rem; }
+  .navigation__link:link, .navigation__link:visited {
     color: #fff;
     font-size: 3rem;
-    font-weight: 300; }
-    .navigation__link {
+    font-weight: 300;
+    padding: 1rem 1rem;
+    background-image: linear-gradient(120deg, transparent 0%, transparent 50%, #fff 50%);
+    background-size: 220%;
+    transition: all .4s; }
+    .navigation__link:link, .navigation__link:visited {
       text-decoration: none;
       text-transform: uppercase; }
+  .navigation__link:hover, .navigation__link:active {
+    background-position: 100%;
+    color: #000;
+    transform: translateX(1rem); }
+
+.navigation__list-icon {
+  margin-top: 4rem; }
+  .navigation__list-icon .social-icon {
+    display: inline-block;
+    color: #fff;
+    font-size: 3rem;
+    border: 1px solid white;
+    width: 4rem;
+    height: 100%;
+    border-radius: 50%; }
+    .navigation__list-icon .social-icon:not(:last-child) {
+      margin-right: 1.5rem; }
+    .navigation__list-icon .social-icon:hover {
+      border: none; }
