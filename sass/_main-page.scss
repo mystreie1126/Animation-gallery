@@ -8,11 +8,14 @@
   
   .img-link{
       @include clear-underline;
+      box-sizing: border-box;
+      border: 1px solid #1d262d;
       float: left;
       width:calc(100%/8);
       height: 100vh;
       text-align: center;
       position: relative;
+      //animation: animate-1 1s ease;
       transition: all .3s ease-in;
       &:hover{
         transform: scale(1.2) skewX(-2deg);
@@ -32,16 +35,19 @@
   .img-link-1{
     background-image: url(../img/taichi.png);
     @include bg-img-property;
+    
   }
 
   .img-link-2{
     background-image: url(../img/flash-grid.png);
     @include bg-img-property;
+    
   }
   
   .img-link-3{
     background-image: url(../img/gravity.png);
     @include bg-img-property;
+    
   }
 
   .img-link-4{

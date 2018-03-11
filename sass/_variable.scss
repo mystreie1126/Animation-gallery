@@ -10,6 +10,10 @@ $stack-order-medium :2;
 
 //font
 $canvas-title-font: 4.8rem;
+
+//animation
+
+$transform-time: 4s;
 //mixin
 
 @mixin clearfix{
@@ -49,9 +53,10 @@ $canvas-title-font: 4.8rem;
     }
 }
 
-@mixin bg-img-property{
+@mixin bg-img-property(){
     &{
         background-position: center;
         background-size: cover;
+        
     }
 }
