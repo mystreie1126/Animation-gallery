@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Colored gear</title>
+	<title>Collision Gears</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
     <link rel="stylesheet" href="../../css/main.css">
@@ -16,7 +16,7 @@
 			<a href="../main.html" class="prev">&#9001;</a>
 		</div>
 		<div class="canvas__wrapper-info">
-			<h1 class="canvas-details canvas-details-title">colored gears</h1>
+			<h1 class="canvas-details canvas-details-title">Collision Gears</h1>
 			<h1 class="canvas-details canvas-details-line"></h1>
 			<h1 class="canvas-details canvas-details-date">Jan 03, 2018</h1>
 		</div>
@@ -31,10 +31,10 @@
 	
 			<nav class="navigation__nav">
 				<ul class="navigation__list">
-					<li class="navigation__item"><a href="#" class="navigation__link">Home</a></li>
-					<li class="navigation__item"><a href="#" class="navigation__link">All projects</a></li>
-					<li class="navigation__item"><a href="#" class="navigation__link">source code</a></li>
-					<li class="navigation__item"><a href="#" class="navigation__link">contact</a></li>
+						<li class="navigation__item"><a href="../../index.html" class="navigation__link">Home</a></li>
+						<li class="navigation__item"><a href="../main.html" class="navigation__link">All projects</a></li>
+						<li class="navigation__item"><a href="https://github.com/mystreie1126/Animation-gallery" target="_blank" class="navigation__link">source code</a></li>
+						<li class="navigation__item"><a href="#" class="navigation__link" id="contact">contact</a></li>
 					<div class="navigation__list-icon">
 						<a href="https://twitter.com/JianNCI" target="_blank" class="social-icon"><i class="fa fa-twitter"></i></a>
 						<a href="https://jianqilu1126@gmail.com" target="_blank" class="social-icon" target="_blank"><i class="fa fa-google"></i></a>
@@ -46,9 +46,194 @@
 	
 		</div>
 
+
+
+
+
 <script>
+console.log(123);
+
+//Initial Setup
+
+var canvas = document.querySelector('canvas');
+var ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+//Variables 
+
+var mouse = {
+	x: innerWidth/2,
+	y: innerHeight/2
+};
+
+var colors = [
+	'#00366E',
+	'#BB0D00',
+	'#75185A',
+	'#FFCC17',
+	'#BA27BB',
+	'#20999B',
+	'#2BBB2D'
+];
+
+//Event Listeners
+addEventListener('mousemove', event => {
+	mouse.x = event.clientX;
+	mouse.y = event.clientY;
+
+});
+
+addEventListener('resize', () => {
+	canvas.width = innerWidth;
+	canvas.height = innerHeight;
+
+	init();
+});
+
+// Utility Functions
+
+function randomIntFromRange(min,max){
+	return Math.floor(Math.random()* (max - min + 1) + min);
+}
+
+function randomColor(colors){
+	return colors[Math.floor(Math.random()* colors.length)];
+}
+
+
+function distance(x1,y1,x2,y2){
+	let xDist = x2 - x1;
+	let yDist = y2 - y1;
+
+	return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist,2));
+}
+
+
+//Objects 
+
+function Particle(x,y,radius,rad,color){
+
+	//big circle attributes
+	this.x = x;
+	this.y = y;
+	this.radius = radius;
+	this.dot_r = 3;
+	this.color = color;
+	this.width = this.radius/5;
+	this.rad = rad;
+	this.rad_rate = Math.PI/8;
+	this.gearArr = {
+		startX:[],startY:[],endX:[],endY:[],outX1:[],outY1:[],outX2:[],outY2:[]
+	}
+	this.init = function(){
+		for(let i = 0; i < 30; i++){
+			this.gearArr.startX.push(this.x + this.radius*Math.cos(this.rad));
+			this.gearArr.startY.push(this.y + this.radius*Math.sin(this.rad));
+			this.gearArr.endX.push(this.x + this.radius*Math.cos(this.rad + this.rad_rate));
+			this.gearArr.endY.push(this.y + this.radius*Math.sin(this.rad + this.rad_rate));
+			this.gearArr.outX1.push(this.x + (this.radius+this.width)*Math.cos(this.rad + this.rad_rate/4));
+			this.gearArr.outY1.push(this.y + (this.radius+this.width)*Math.sin(this.rad + this.rad_rate/4));
+			this.gearArr.outX2.push(this.x + (this.radius+this.width)*Math.cos(this.rad + (this.rad_rate/3)*2));
+			this.gearArr.outY2.push(this.y + (this.radius+this.width)*Math.sin(this.rad + (this.rad_rate/3)*2));
+	
+			this.rad += this.rad_rate;
+		}
+	};
+	this.init();
+	//backgroud circle
+	this.background_circle = () => {
+			
+	};
+	this.draw = () => {
+		ctx.beginPath();
+		ctx.arc(this.x, this.y,this.radius,0, Math.PI*2, false);
+		ctx.fillStyle = this.color;
+		ctx.fill();
+		ctx.closePath();
+		for(let i = 0; i < 30; i++){
+			ctx.beginPath();
+			ctx.moveTo(this.gearArr.startX[i],this.gearArr.startY[i]);
+			ctx.lineTo(this.gearArr.outX1[i],this.gearArr.outY1[i]);
+			ctx.lineTo(this.gearArr.outX2[i],this.gearArr.outY2[i]);
+			ctx.lineTo(this.gearArr.endX[i],this.gearArr.endY[i]);
+			ctx.fillStyle = this.color;
+			ctx.fill();
+		}
+	};	
+ }
+
+
+
+//Implementation 
+function Gear(x,y,r,rad){
+	this.x = x;
+	this.y = y;
+	this.r= r;
+	this.rad = rad;
+	this.speed = Math.random()*0.07;
+	this.color = randomColor(colors);
+	this.update = function(){
+		let gear = new Particle(this.x,this.y,this.r,this.rad,this.color);
+		gear.draw();
+		
+		this.rad+=this.speed;
+	}
+}
+
+
+let gears;
+
+function init(){
+	gears = [];
+	for(let i = 0; i < 40; i++){
+		let x = Math.random()*canvas.width;
+		let y = Math.random()*canvas.height;
+
+		const radius = canvas.width/20;
+		const rad = 2;
+
+		if(i !== 0){
+			for (let j = 0; j < gears.length; j++){
+				if(distance(x, y, gears[j].x, gears[j].y) - radius * 2 < 0){
+					x = Math.random()* canvas.width;
+					y = Math.random()* canvas.height;
+
+					j= -1;
+				}
+
+			}
+		}
+
+
+
+
+		gears.push(new Gear(x,y,radius,rad));
+	}
+
+}
+
+//Animation loop
+
+function animate(){
+	requestAnimationFrame(animate);
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	
+	gears.forEach((e) =>{
+		e.update();
+	});
+	
+}
+
+init();
+animate();
+
+
 
 
 </script>
+<script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../../script/app.js"></script>
 </body>
 </html>

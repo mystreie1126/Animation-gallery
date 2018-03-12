@@ -490,7 +490,8 @@ body {
     height: 100%;
     border-radius: 50%;
     opacity: 0;
-    transition: all 2s ease-in; }
+    transform: translateX(-100rem);
+    transition: all .5s ease-in; }
     .navigation__list-icon .social-icon:link:not(:last-child),
     .navigation__list-icon .social-icon:visited:not(:last-child) {
       margin-right: 1.5rem; }

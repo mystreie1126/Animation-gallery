@@ -10,8 +10,8 @@
         height: 100%;
         border-radius: 50%;
         opacity: 0;
-        
-        transition: all 2s ease-in;
+        transform: translateX(-100rem);
+        transition: all .5s ease-in;
 
         &:not(:last-child){
             margin-right: 1.5rem;

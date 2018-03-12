@@ -27,7 +27,8 @@ $(document).ready(function(){
 
     $('#contact').click(()=>{
         $('.social-icon').css({
-            'opacity':1
+            'opacity':1,
+            'transform':'translateX(0)'
         });
 
         console.log(123);
