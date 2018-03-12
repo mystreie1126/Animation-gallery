@@ -1,6 +1,7 @@
 .navigation__list-icon{
     margin-top: 4rem;
-    .social-icon{
+    .social-icon:link,
+    .social-icon:visited{
         display: inline-block;
         color: $color-white;
         font-size: 3rem;
@@ -8,11 +9,13 @@
         width: 4rem;
         height: 100%;
         border-radius: 50%;
+        opacity: 0;
+        
+        transition: all 2s ease-in;
 
         &:not(:last-child){
             margin-right: 1.5rem;
         }
-
         &:hover{
             border: none;
         }

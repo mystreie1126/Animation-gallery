@@ -480,15 +480,20 @@ body {
 
 .navigation__list-icon {
   margin-top: 4rem; }
-  .navigation__list-icon .social-icon {
+  .navigation__list-icon .social-icon:link,
+  .navigation__list-icon .social-icon:visited {
     display: inline-block;
     color: #fff;
     font-size: 3rem;
     border: 1px solid white;
     width: 4rem;
     height: 100%;
-    border-radius: 50%; }
-    .navigation__list-icon .social-icon:not(:last-child) {
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 2s ease-in; }
+    .navigation__list-icon .social-icon:link:not(:last-child),
+    .navigation__list-icon .social-icon:visited:not(:last-child) {
       margin-right: 1.5rem; }
-    .navigation__list-icon .social-icon:hover {
+    .navigation__list-icon .social-icon:link:hover,
+    .navigation__list-icon .social-icon:visited:hover {
       border: none; }
