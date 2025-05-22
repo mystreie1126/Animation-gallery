@@ -18,11 +18,18 @@ $(document).ready(function(){
         
     }
 
-    $('.view_all-btn').click(()=>{
+    $('.view_all-btn').click(function(event){ // Changed to function(event) to access 'this'
+        event.preventDefault();
         $('.gallery-container').css({
             'transform':'translateX(-120%)' 
         });
         move_home_btn();
+        
+        // Store 'this' to use inside setTimeout
+        var $this = $(this); 
+        setTimeout(function() {
+            window.location.href = $this.attr('href');
+        }, 5000);
     })
 
     $('#contact').click(()=>{
